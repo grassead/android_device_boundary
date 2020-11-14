@@ -43,6 +43,8 @@ if itest.s "x1" == "x$m4enabled" ; then
 	setenv m4 "-m4";
 fi
 
+setenv bridge "-lt8912";
+
 if itest.s "x" == "x${board}" ; then
 	echo "!!!! Error: Your u-boot is outdated. Please upgrade.";
 	exit;
@@ -55,11 +57,12 @@ ${devtype} read ${a_fdtbo} ${dtbo_start} ${dtbo_size}
 adtimg addr ${a_fdtbo}
 
 # Look for matching compatible
-setenv dtexp boundary,imx8mm-${board}${m4}
+setenv dtexp boundary,imx8mm-${board}${m4}${bridge}
 setenv index 0
 setenv cont 1
 setenv dtfound 0
 setenv fdt_high 0xffffffffffffffff
+echo "Looking for $dtexp"
 while itest.s "${cont}" == "1" ; do
 	if adtimg get dt --index=${index} a_fdtbo s_fdtbo ; then
 		fdt addr ${a_fdtbo}
